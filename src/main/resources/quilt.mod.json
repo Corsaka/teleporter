@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+
+  "quilt_loader": {
+    "group": "${mod_group}",
+    "id": "${mod_id}",
+    "version": "${mod_version}",
+    "provides": [
+      "cosmic_quilt"
+    ],
+
+    "intermediate_mappings": "net.fabricmc:intermediary",
+
+    "metadata": {
+      "name": "${mod_name}",
+      "description": "Allows the use of the Quilt Loader on Cosmic Reach",
+      "contributors": {
+        "coolGi": "Owner"
+      },
+
+      "contact": {
+        "homepage": "https://codeberg.org/CRModders/cosmic-quilt",
+        "issues": "https://codeberg.org/CRModders/cosmic-quilt/issues",
+        "sources": "https://codeberg.org/CRModders/cosmic-quilt"
+      },
+
+      "icon": "assets/cosmicquilt/icon.png"
+    },
+
+    "depends": [
+      {
+        "id": "quilt_loader",
+        "versions": "*"
+      },
+      {
+        "id": "cosmic_reach",
+        "versions": "*"
+      }
+    ]
+  },
+
+  "mixin": "cosmicquilt.mixins.json"
+}

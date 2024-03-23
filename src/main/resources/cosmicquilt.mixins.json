@@ -1,0 +1,18 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "org.coolcosmos.cosmicquilt.mixins",
+  "compatibilityLevel": "JAVA_17",
+
+  "mixins": [
+    "entrypoint.GameLoadMixin",
+    "override.SaveLocationMixin"
+  ],
+
+  "client": [],
+  "server": [],
+
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
