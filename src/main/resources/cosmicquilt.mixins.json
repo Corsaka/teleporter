@@ -1,7 +1,7 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "org.coolcosmos.cosmicquilt.mixins",
+  "package": "corsaka.teleporter.mixins",
   "compatibilityLevel": "JAVA_17",
 
   "mixins": [

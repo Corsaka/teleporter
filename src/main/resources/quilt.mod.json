@@ -13,15 +13,15 @@
 
     "metadata": {
       "name": "${mod_name}",
-      "description": "Allows the use of the Quilt Loader on Cosmic Reach",
+      "description": "A mod that adds teleport blocks.",
       "contributors": {
-        "coolGi": "Owner"
+        "Corsaka": "Owner"
       },
 
       "contact": {
-        "homepage": "https://codeberg.org/CRModders/cosmic-quilt",
-        "issues": "https://codeberg.org/CRModders/cosmic-quilt/issues",
-        "sources": "https://codeberg.org/CRModders/cosmic-quilt"
+        "homepage": "https://github.com/Corsaka/teleporter",
+        "issues": "https://github.com/Corsaka/teleporter/issues",
+        "sources": "https://github.com/Corsaka/teleporter"
       },
 
       "icon": "assets/cosmicquilt/icon.png"

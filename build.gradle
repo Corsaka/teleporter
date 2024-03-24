@@ -77,7 +77,15 @@ dependencies {
     implementation "org.ow2.asm:asm-tree:${asm_version}"
     implementation "org.ow2.asm:asm-analysis:${asm_version}"
     implementation "org.ow2.asm:asm-commons:${asm_version}"
+    implementation "org.hjson:hjson:3.1.0"
 }
+
+//flatDir {
+//    dirs "${rootDir}/mods/quilt"
+//    content {
+//        includeGroup "quilt-mod"
+//    }
+//}
 
 processResources {
     // Locations of where to inject the properties
