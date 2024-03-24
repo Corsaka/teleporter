@@ -5,9 +5,6 @@
     "group": "${mod_group}",
     "id": "${mod_id}",
     "version": "${mod_version}",
-    "provides": [
-      "cosmic_quilt"
-    ],
 
     "intermediate_mappings": "net.fabricmc:intermediary",
 
@@ -24,7 +21,11 @@
         "sources": "https://github.com/Corsaka/teleporter"
       },
 
-      "icon": "assets/cosmicquilt/icon.png"
+      "icon": "assets/teleporter/icon.png"
+    },
+
+    "entrypoints": {
+      "init": "corsaka.teleporter.Teleporter"
     },
 
     "depends": [

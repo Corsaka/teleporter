@@ -37,6 +37,13 @@ repositories {
         url "https://repo.spongepowered.org/maven/"
     }
 
+    flatDir {
+        dirs "${rootDir}/mods"
+        content {
+            includeGroup "quilt-mod"
+        }
+    }
+
     mavenCentral()
 }
 
@@ -72,7 +79,7 @@ processResources {
             "mod_version"     : project.version,
             "mod_group"       : project.group,
             "mod_name"        : project.name,
-            "mod_id"          : id,
+            "mod_id"          : id
     ]
 
 

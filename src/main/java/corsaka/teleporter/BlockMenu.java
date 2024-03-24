@@ -4,33 +4,45 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.utils.viewport.Viewport;
 import finalforeach.cosmicreach.gamestates.GameState;
-import finalforeach.cosmicreach.ui.FontRenderer;
 import finalforeach.cosmicreach.ui.UIElement;
 import finalforeach.cosmicreach.ui.VerticalAnchor;
+import io.github.crmodders.flux.ui.TextElement;
 
 public class BlockMenu extends GameState {
   private static NumberTextButton activeField;
-  private Viewport uiViewport;
   GameState previousState;
-  //TeleportBlock teleportBlock;
 
-  public BlockMenu(final GameState previousState) {
+  public BlockMenu(final GameState previousState,TeleportBlock teleportBlock) {
     this.previousState = previousState;
+    TextElement element = new TextElement(0,-200,"Teleport Block Config",2,false);
+    element.show();
+    this.uiElements.add(element);
 
-    FontRenderer.drawText(batch,uiViewport,"Teleport Block Config",-120.0F,-200.0F);
-    //addMenu(teleportBlock.x,teleportBlock.y,teleportBlock.z);
+    NumberTextButton xField = new NumberTextButton("X", teleportBlock.x, 0.0F, -100.0F, 150.0F, 50.0F);
+    NumberTextButton yField = new NumberTextButton("Y", teleportBlock.y, 0.0F, 0.0F, 150.0F, 50.0F);
+    NumberTextButton zField = new NumberTextButton("Z", teleportBlock.z, 0.0F, 100.0F, 150.0F, 50.0F);
+    xField.show();
+    yField.show();
+    zField.show();
+    this.uiElements.add(xField);
+    this.uiElements.add(yField);
+    this.uiElements.add(zField);
+
     UIElement doneButton = new UIElement(0.0F, -50.0F, 250.0F, 50.0F) {
       @Override
       public void onClick() {
         super.onClick();
+        teleportBlock.x = xField.getFloatValue(true);
+        teleportBlock.y = yField.getFloatValue(false);
+        teleportBlock.z = zField.getFloatValue(true);
         GameState.switchToGameState(previousState);
       }
     };
     doneButton.vAnchor = VerticalAnchor.BOTTOM_ALIGNED;
     doneButton.setText("Done");
     doneButton.show();
+    this.uiElements.add(doneButton);
   }
 
   @Override
@@ -47,29 +59,25 @@ public class BlockMenu extends GameState {
     this.drawUIElements();
   }
 
-  private void addMenu(float xVal, float yVal, float zVal) {
-    NumberTextButton xField = new NumberTextButton("X", Float.toString(xVal), 0.0F, -100.0F, 150.0F, 50.0F);
-    NumberTextButton yField = new NumberTextButton("Y", Float.toString(yVal), 0.0F, 0.0F, 150.0F, 50.0F);
-    NumberTextButton zField = new NumberTextButton("Z", Float.toString(zVal), 0.0F, 100.0F, 150.0F, 50.0F);
-    this.uiElements.add(xField);
-    this.uiElements.add(yField);
-    this.uiElements.add(zField);
-  }
-
   static class NumberTextButton extends UIElement {
     InputProcessor inputProcessor;
     String label;
     String value;
-    int[] permittedKeycodes = new int[]{7,8,9,10,11,12,13,14,15,16,55,56,144,145,146,147,148,149,150,151,152,153,158,159};
-    //numbers, numpad, dot, and comma (for non-english decimals)
+    private boolean inputted;
+    private String oldValue;
 
-    public NumberTextButton(String label, String value, float x, float y, float w, float h) {
+    //numbers, minus, dot, and comma (for non-english decimals), for both standard + numpad
+    private final int[] permittedKeycodes = new int[]{7,8,9,10,11,12,13,14,15,16,55,56,69,144,145,146,147,148,149,150,151,152,153,156,158,159};
+
+    public NumberTextButton(String label, float value, float x, float y, float w, float h) {
       super(x, y, w, h);
+      this.value = Float.toString(value);
       this.label = label;
+      this.updateText();
     }
 
-    private float getValue() {
-      if(value.contains(".") || value.contains(",")) {
+    private float getFloatValue(boolean addHalfToInt) {
+      if(value.contains(".") || value.contains(",") || !addHalfToInt) {
         if(value.contains(",")) {
           value = value.replace(',','.');
         }
@@ -79,16 +87,17 @@ public class BlockMenu extends GameState {
       }
     }
 
-    @Override
-    public void onCreate() {
-      super.onCreate();
-    }
-
-    public void deactivate() {
+    private void deactivate() {
+      if(!inputted) { value = oldValue; }
       BlockMenu.activeField = null;
       this.updateText();
       Gdx.input.setInputProcessor(this.inputProcessor);
       this.inputProcessor = null;
+    }
+
+    @Override
+    public void onCreate() {
+      super.onCreate();
     }
 
     @Override
@@ -100,6 +109,8 @@ public class BlockMenu extends GameState {
         if (BlockMenu.activeField != null) {
           BlockMenu.activeField.deactivate();
         }
+        oldValue = value;
+        value = "";
         BlockMenu.activeField = this;
         this.inputProcessor = Gdx.input.getInputProcessor();
         Gdx.input.setInputProcessor(this);
@@ -111,7 +122,8 @@ public class BlockMenu extends GameState {
     @Override
     public boolean keyDown(int keycode) {
       if(keycode == 67) { //backspace
-        if(value != null) { value = value.substring(0,value.length()-1); }
+        if(value == null) { return false; }
+        value = value.substring(0,value.length()-1);
         this.updateText();
         return true;
       }
@@ -126,9 +138,8 @@ public class BlockMenu extends GameState {
         if(keycode == permittedKeycode) { permitted = true; break; }
       }
       if(!permitted) { return false; }
-
-      String qwertyKeyName = Input.Keys.toString(keycode);
-      value = value + qwertyKeyName; //append
+      inputted = true;
+      value = value + Input.Keys.toString(keycode);
 
       this.updateText();
       return true;

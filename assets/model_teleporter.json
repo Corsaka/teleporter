@@ -1,0 +1,11 @@
+{
+  "parent": "cube_no_ao",
+
+  "textures":
+  {
+    "all":
+    {
+      "fileName": "teleporter-16x.png"
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "stringId": "teleporter:teleportblock",
+  "defaultParams": {
+    "x": "0.0",
+    "y": "0.0",
+    "z": "0.0"
+  },
+  "blockStates": {
+    "default": {
+      "modelName" : "model_teleporter",
+      "lightLevelRed": "3",
+      "lightLevelGreen": "0",
+      "lightLevelBlue": "2"
+    }
+  }
+}

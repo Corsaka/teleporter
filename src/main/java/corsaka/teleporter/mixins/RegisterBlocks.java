@@ -1,6 +1,6 @@
 package corsaka.teleporter.mixins;
 
-import corsaka.teleporter.blocks.TestingBlock;
+import corsaka.teleporter.TeleportBlock;
 import finalforeach.cosmicreach.BlockGame;
 import io.github.crmodders.flux.api.generators.data.BlockDataGen;
 import io.github.crmodders.flux.api.registries.BuiltInRegistries;
@@ -16,10 +16,10 @@ public class RegisterBlocks {
 
   @Inject(method = "create", at = @At("TAIL"))
   private void register(CallbackInfo ci) {
-    Identifier TestBlockID = new Identifier("examplemod", "test");
+    Identifier TeleportBlockID = new Identifier("teleporter", "teleportblock");
 
-    BlockDataGen TestBlock = BlockDataGen.createGenerator(
-            TestBlockID
+    BlockDataGen TeleportBlock = BlockDataGen.createGenerator(
+            TeleportBlockID
     ).setBlockstate(
             "default",
             BlockDataGen.BlockStateDataGen.createGenerator()
@@ -27,8 +27,8 @@ public class RegisterBlocks {
     );
 
     BuiltInRegistries.MODDED_BLOCKS.register(
-            TestBlockID,
-            new TestingBlock(TestBlock::Generate)
+            TeleportBlockID,
+            new TeleportBlock(TeleportBlock::Generate)
     );
   }
 
