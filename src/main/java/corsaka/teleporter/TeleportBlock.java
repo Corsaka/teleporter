@@ -1,4 +1,4 @@
-/*package corsaka.teleporter;
+package corsaka.teleporter;
 
 import finalforeach.cosmicreach.world.BlockPosition;
 import finalforeach.cosmicreach.world.World;
@@ -22,4 +22,3 @@ public class TeleportBlock extends ModBlock implements WorkingBlock {
 
   }
 }
-*/

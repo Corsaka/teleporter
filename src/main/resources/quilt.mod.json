@@ -39,5 +39,5 @@
     ]
   },
 
-  "mixin": "cosmicquilt.mixins.json"
+  "mixin": "teleporter.mixins.json"
 }

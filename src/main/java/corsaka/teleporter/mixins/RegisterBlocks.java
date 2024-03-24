@@ -1,4 +1,3 @@
-/*
 package corsaka.teleporter.mixins;
 
 import corsaka.teleporter.blocks.TestingBlock;
@@ -34,4 +33,3 @@ public class RegisterBlocks {
   }
 
 }
-*/

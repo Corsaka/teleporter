@@ -1,6 +1,5 @@
 plugins {
     id "application"
-    id "java-library"
     id "maven-publish"
 }
 
@@ -22,6 +21,10 @@ repositories {
     }
 
     maven {
+        name "JitPack"
+        url "https://jitpack.io"
+    }
+    maven {
         name "Quilt"
         url "https://maven.quiltmc.org/repository/release"
     }
@@ -35,14 +38,15 @@ repositories {
     }
 
     mavenCentral()
-    // Not needed, but useful for debugging
-    mavenLocal()
 }
 
 
 configurations {
-    cosmicreach
-    compileOnly.extendsFrom(cosmicreach)
+    cosmicreach // Config to provide the Cosmic Reach project
+    compileOnly.extendsFrom(cosmicreach) // Allows cosmic reach to be used in the codebase
+
+    quiltMod // Config to be able to load Quilt Mods
+    implementation.extendsFrom(quiltMod)
 }
 
 
@@ -50,46 +54,16 @@ dependencies {
     // Cosmic Reach jar
     cosmicreach "finalforeach:cosmicreach:${cosmic_reach_version}"
 
-    // Slf4j
-    api "org.slf4j:slf4j-api:${slf4j_version}"
-    implementation "org.slf4j:slf4j-jdk14:${slf4j_version}"
-    implementation "uk.org.lidalia:sysout-over-slf4j:${slf4j_sysout_helper_version}"
-    // Log4j
-//    implementation "org.apache.logging.log4j:log4j-core:${log4j_version}"
-//    implementation "org.slf4j:slf4j-reload4j:${slf4j_version}"
+    // QuiltMods
+    quiltMod "org.codeberg.CRModders:cosmic-quilt:${cosmic_quilt_version}"
+    quiltMod "quilt-mod:FluxAPI:0.2.0"
 
-    // Quilt Loader
-    api "org.quiltmc:quilt-loader:${quilt_loader_version}"
-    api "org.quiltmc:quilt-json5:${quilt_json_version}"
-    api "org.quiltmc:quilt-config:${quilt_config_version}"
-    runtimeOnly "org.quiltmc:tiny-remapper:${quilt_remapper_version}"
-    runtimeOnly "net.fabricmc:access-widener:${fabric_accesswidener_version}" // Until access widener support has been tested, dont allow the devs to use it
-
-    // Mixins
-    api "org.spongepowered:mixin:${mixin_version}"
-    api "io.github.llamalad7:mixinextras-fabric:${mixinextras_version}" // Note: Despite it saying "fabric", its implementation is also for quilt
-
-    // Extra libraries
-    implementation "com.google.guava:guava:${guava_version}"
-    implementation "com.google.code.gson:gson:${gson_version}"
-    implementation "org.ow2.asm:asm:${asm_version}"
-    implementation "org.ow2.asm:asm-util:${asm_version}"
-    implementation "org.ow2.asm:asm-tree:${asm_version}"
-    implementation "org.ow2.asm:asm-analysis:${asm_version}"
-    implementation "org.ow2.asm:asm-commons:${asm_version}"
+    //Other dependencies
     implementation "org.hjson:hjson:3.1.0"
 }
 
-//flatDir {
-//    dirs "${rootDir}/mods/quilt"
-//    content {
-//        includeGroup "quilt-mod"
-//    }
-//}
-
 processResources {
-    // Locations of where to inject the properties
-    def resourceTargets = [
+    def resourceTargets = [ // Locations of where to inject the properties
             "quilt.mod.json"
     ]
 
@@ -115,17 +89,28 @@ application {
     mainClass = "org.quiltmc.loader.impl.launch.knot.KnotClient"
 }
 
+// Sets up all the Quilt Mods
+def String getQuiltModLocations(Configuration config) {
+    StringBuilder sb = new StringBuilder()
+    for (obj in config.allDependencies) {
+        sb.append(File.pathSeparator + config.files(obj)[0])
+    }
+    return sb.toString()
+}
+
 applicationDefaultJvmArgs = [
         "-Dloader.skipMcProvider=true", // Stops Quilt from attempting to find mappings, and all the other Minecraft stuff
         "-Dloader.gameJarPath=" + configurations.cosmicreach.asPath, // Defines path to Cosmic Reach
-        "-Dloader.addMods=" + jar.archiveFile.get().asFile // Add the jar of Cosmic Quilt to be loaded as a mod as well (for items that needs to be loaded as a mod)
+        "-Dloader.addMods=" +
+                jar.archiveFile.get().asFile + // Add the jar of this project
+                getQuiltModLocations(configurations.quiltMod) // Adds the jars of any Quilt mods added
 ]
+
 run {
-    // So that the Cosmic Quilt extras that have to be loaded in the mod stage,
-    //  the jar of Cosmic Quilt needs to be loaded as a regular mod
+    // To run this project in the game, depend on the creation of jar task
     dependsOn "jar"
 
-    // Set the run dir
+    // Change the run directory
     File runningDir = new File("run/")
     if (!runningDir.exists())
         runningDir.mkdirs()
@@ -151,5 +136,9 @@ publishing {
 
 		    from components.java
         }
+    }
+
+    repositories {
+
     }
 }

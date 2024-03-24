@@ -1,29 +1,17 @@
-# Cosmic Quilt Loader
-> Allows you to use the [Quilt Loader](https://quiltmc.org/) on [Cosmic Reach](https://finalforeach.itch.io/cosmic-reach)
+# Cosmic Quilt Example Mod
+> The example mod for the [Cosmic Quilt](https://codeberg.org/CRModders/cosmic-quilt) Loader
 
-## What is this?
-This is a fork of [Galactic Loader](https://github.com/GalacticLoader/GalacticLoader) for running Quilt on Cosmic Reach rather than Fabric\
-Why Quilt over Fabric? Read this: https://quiltmc.org/en/about/faq/#why-should-i-use-quilt
+## How to test/build
+For testing in the dev env, you can use the `gradle run` task
 
-## How to use
-Please read the instructions over at the Cosmic Quilt wiki:\
-https://codeberg.org/CRModders/cosmic-quilt/wiki
+For building, the usual `gradle build` task can ba used\
+the output will be in the `build/libs/` folder
 
-## Methods of installation
-### Using Prism Launcher
-Follow the instructions over at https://codeberg.org/CRModders/cosmic-under-prism
+## Wiki
+For a wiki on how to use Cosmic Quilt & Quilt, please look at the [Cosmic Quilt wiki](https://codeberg.org/CRModders/cosmic-quilt/wiki) 
 
-### TODO
-Once more launchers are created for Cosmic Reach, they will be added here
-
-## Credits
-
-Direct forks:
-- Thx to Eric for the original [HellowWorldFabirc](https://github.com/EliteMasterEric/HelloWorldFabric) project
-- and to ForwarD NerN for [porting it to Cosmic Reach](https://github.com/ForwarD-NerN/CosmicReach-Mod-Loader)
-- and finally to the CRModders group for [the project this is based upon](https://github.com/GalacticLoader/GalacticLoader)
-
-Resources:
-- Quilt Discord & Team for making Quilt and being amazing!
-- Fabric Docs & Team for providing the foundation
-- FinalForEach for making Cosmic Reach
+## Notes
+- Most project properties can be changed in the `gradle.properties`
+- To change author, description and stuff that isnt there, edit `src/main/resources/quilt.mod.json`
+- The project name is defined in `settings.gradle`
+- To add Quilt mods in the build, make sure to use `quiltMod` rather than `implementation`
